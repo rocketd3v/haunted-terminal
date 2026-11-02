@@ -1,1 +1,3 @@
-run the program from the animations.py file as it is still a work in progress
+Haunted terminal: A simulation of a terminal experience, but the terminal is haunted by ghosts.
+
+download / copy the animations.py file and run it in any python editor, it should work anywhere.
