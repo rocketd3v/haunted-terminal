@@ -1,0 +1,20 @@
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "haunted-terminal"
+version = "1.0.0"
+description = "A haunted terminal simulation featuring interactive ghosts"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    {name = "rocketd3v"}
+]
+
+[project.scripts]
+haunted-terminal = "main:main"
+
+[tool.setuptools]
+py-modules = ["main"]

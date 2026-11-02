@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: haunted-terminal
+Version: 1.0.0
+Summary: A haunted terminal simulation featuring interactive ghosts
+Author: rocketd3v
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
+Haunted terminal: A simulation of a terminal experience, but the terminal is haunted by ghosts.
+
+download / copy the main.py file and run it in any python editor, it should work anywhere.
