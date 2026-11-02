@@ -1,53 +1,65 @@
 import random
-from cerebras.cloud.sdk import AsyncCerebras
-import os
-import asyncio
 
-
-ghosts = ["watcher", "phantom"] 
+ghosts = ["watcher", "phantom"]     
 
 class ghost:
     def __init__(self, name):
         self.name = name
         self.history = [ # referring to chat history
         ]
-        self.personality = f"You are the {name}, You speak in a spooky / cryptic way. dont make your responses too long, you live within the users terminal, never claim to actually be able to access / manage then users files"
-        self.client = AsyncCerebras(api_key=os.getenv("CEREBRAS_API_KEY"))
-        self.model = "qwen-3.8-27b"
-    
-    async def reply(self, message):
+        self.responses = [ #fix this properly later
+            "I have been waiting for you...",
+            "You shouldn't have come here.",
+            "Interesting... tell me more.",
+            "I see you.",
+            "The darkness remembers everything."
+            ]
+        
+        self.empty_responses = [
+            "Silence won't save you",
+            "Speak louder, mortal.",
+            "Did you hear that?"
+        ]
+        
+        self.quit_responses = [
+            "You have escaped me. for now...",
+            "I shall return"
+        ]
+  
+    def reply(self, message):
         self.history.append({"role": "user", "content": message})
 
-        messages = [
-            {"role": "system", "content": self.personality},
-        ] + self.history
+        answer = random.choice(self.responses)
 
-        response = await self.client.chat.completions.create(model=self.model, messages=messages)
-        answer = response.choices[0].message.content
-
-        self.history.append({"role": "assistant", "content": answer})
-        return answer
+        self.history.append({"role": "ghost", "content": answer})
+        print(f"{self.name}: {answer}")
         
+    def reply_empty(self):
+        answer = random.choice(self.empty_responses)
+        print(f"{self.name}: {answer}")
+
+    def reply_quit(self):
+        answer = random.choice(self.quit_responses)
+        print(f"{self.name}: {answer}")
 
     def reset(self):
         self.history.clear()
 
 ghost = ghost(random.choice(ghosts)) # pick a random name for the ghost.
 
-async def main():
-    while True:
-        message = input("message: ")
-        ghost.history.append({"role": "user", "content": message}) # roles are user and assistant
 
-        if message[0] == "/":
-            if message == "/help":
-                print("")
-            elif message == "/reset" or message == "/clear":
-                ghost.reset()
-            elif message == "/quit":
-                print("You have escaped me. for now...")
-                break
+while True:
+    message = input("message: ")
+
+    if message.startswith("/"):
+        if message == "/help":
+            print("Commands:\n/help - displays a list of available commands\n/reset or /clear - resets conversation history\n/quit - ends program")
+        elif message == "/reset" or message == "/clear":
+            ghost.reset()
+        elif message == "/quit":
+            ghost.reply_quit()
+            break
         else:
-            await ghost.reply(message)
-
-asyncio.run(main())
+            print("Invalid command.")
+    else:
+        ghost.reply(message)
