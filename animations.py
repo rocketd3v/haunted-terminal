@@ -29,18 +29,16 @@ class ghost:
     def reply(self, message):
         self.history.append({"role": "user", "content": message})
 
-        answer = random.choice(self.responses)
+        if len(message) == 0: # empty messages
+            answer = random.choice(self.empty_responses)
+        elif message == "/quit": 
+            answer = random.choice(self.quit_responses)
+        else: # normal message
+            answer = random.choice(self.responses)
 
         self.history.append({"role": "ghost", "content": answer})
         print(f"{self.name}: {answer}")
         
-    def reply_empty(self):
-        answer = random.choice(self.empty_responses)
-        print(f"{self.name}: {answer}")
-
-    def reply_quit(self):
-        answer = random.choice(self.quit_responses)
-        print(f"{self.name}: {answer}")
 
     def reset(self):
         self.history.clear()
@@ -57,7 +55,7 @@ while True:
         elif message == "/reset" or message == "/clear":
             ghost.reset()
         elif message == "/quit":
-            ghost.reply_quit()
+            ghost.reply(message)
             break
         else:
             print("Invalid command.")
